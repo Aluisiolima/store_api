@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Any
 import uuid
 from bson import Decimal128
-from pydantic import UUID4, BaseModel, Field, model_serializer
+from pydantic import UUID4, BaseModel, Field, model_serializer, field_serializer
 
 
 class CreateBaseModel(BaseModel):
@@ -20,3 +20,7 @@ class CreateBaseModel(BaseModel):
                 self_dict[key] = Decimal128(str(value))
 
         return self_dict
+
+    @field_serializer("id")
+    def serialize_uuid(self, v: uuid.UUID, _info):
+        return str(v)

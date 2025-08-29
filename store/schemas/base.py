@@ -1,7 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
 from bson import Decimal128
-from pydantic import UUID4, BaseModel, Field, model_validator
+from pydantic import UUID4, BaseModel, Field, model_validator, field_serializer
+import uuid
 
 
 class BaseSchemaMixin(BaseModel):
@@ -21,3 +22,7 @@ class OutSchema(BaseModel):
                 data[key] = Decimal(str(value))
 
         return data
+
+    @field_serializer("id")
+    def serialize_uuid(self, v: uuid.UUID, _info):
+        return str(v)
